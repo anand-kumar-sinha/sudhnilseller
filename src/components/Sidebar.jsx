@@ -20,30 +20,7 @@ const Sidebar = () => {
             <img className='w-5 h-5' src={assets.order_icon}/>
             <p className='hidden md:block'>Orders</p>
         </NavLink>
-        <NavLink className='flex items-center gap-3 border border-gray-300 border-r-0 px-3 py-2 rounded-l' to="/banners">
-            <img className='w-5 h-5' src={assets.order_icon}/>
-            <p className='hidden md:block'>Banners</p>
-        </NavLink>
-        <NavLink className='flex items-center gap-3 border border-gray-300 border-r-0 px-3 py-2 rounded-l' to="/category">
-            <img className='w-5 h-5' src={assets.order_icon}/>
-            <p className='hidden md:block'>Categorys</p>
-        </NavLink>
-        <NavLink className='flex items-center gap-3 border border-gray-300 border-r-0 px-3 py-2 rounded-l' to="/users">
-            <img className='w-5 h-5' src={assets.order_icon}/>
-            <p className='hidden md:block'>Users</p>
-        </NavLink>
-        <NavLink className='flex items-center gap-3 border border-gray-300 border-r-0 px-3 py-2 rounded-l' to="/notifications">
-            <img className='w-5 h-5' src={assets.order_icon}/>
-            <p className='hidden md:block'>Notifications</p>
-        </NavLink>
-        <NavLink className='flex items-center gap-3 border border-gray-300 border-r-0 px-3 py-2 rounded-l' to="/company-details">
-            <img className='w-5 h-5' src={assets.order_icon}/>
-            <p className='hidden md:block'>Company</p>
-        </NavLink>
-        <NavLink className='flex items-center gap-3 border border-gray-300 border-r-0 px-3 py-2 rounded-l' to="/query">
-            <img className='w-5 h-5' src={assets.order_icon}/>
-            <p className='hidden md:block'>Query</p>
-        </NavLink>
+       
       </div>
     </div>
   )
