@@ -9,8 +9,8 @@ import Login from "./components/Login";
 import { ToastContainer } from "react-toastify";
 
 
-// export const backandUrl = "https://ecomm-backend-tau.vercel.app";
-export const backandUrl = "http://localhost:4000";
+export const backandUrl = "https://ecomm-backend-tau.vercel.app";
+// export const backandUrl = "http://localhost:4000";
 
 export const currency = "₹";
 
