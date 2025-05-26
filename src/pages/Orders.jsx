@@ -13,14 +13,12 @@ const Orders = ({ token }) => {
     }
 
     try {
-      const response = await axios.post(
-        backandUrl + "/api/order/list",
-        {},
+      const response = await axios.get(
+        backandUrl + "/api/seller/orders/list",
         { headers: { token } }
       );
-      console.log(response.data);
       if (response.data.success) {
-        setOrders(response.data.orders.reverse());
+        setOrders(response.data.orders);
       } else {
         toast.error(response.data.message);
       }
@@ -32,8 +30,9 @@ const Orders = ({ token }) => {
 
   const statusHandler = async (event, orderId) => {
     try {
+      let token = localStorage.getItem("token");
       const response = await axios.post(
-        backandUrl + "/api/order/status",
+        backandUrl + "/api/seller/order/status",
         { orderId, status: event.target.value },
         { headers: { token } }
       );
@@ -59,25 +58,14 @@ const Orders = ({ token }) => {
             className="grid grid-cols-1 sm:grid-cols-[0.5fr_2fr_1fr] lg:grid-cols-[0.5fr_2fr_1fr_1fr_1fr] gap-3 items-start border-2 border-gray-200 p-5 md:p-8 my-3 md:my-4 text-xs sm:text-sm text-gray-700"
             key={index}
           >
-            <img className="w-12" src={assets.parcel_icon} />
+            <img className="w-12" src={assets.parcel_icon} alt="parcel icon" />
 
             <div>
               <div>
-                {order.items.map((item, index) => {
-                  if (index === order.items.length - 1) {
-                    return (
-                      <p className="py-0.5" key={index}>
-                        {item.name} x {item.quantity} <span>{item.size}</span>
-                      </p>
-                    );
-                  } else {
-                    return (
-                      <p className="py-0.5" key={index}>
-                        {item.name} x {item.quantity} <span>{item.size}</span>,
-                      </p>
-                    );
-                  }
-                })}
+                {/* Updated to match the new item structure */}
+                <p className="py-0.5">
+                  Product ID: {order.item.productId} x {order.item.quantity} ({order.item.size})
+                </p>
               </div>
 
               <p className="mt-3 mb-2 font-medium">
@@ -97,15 +85,14 @@ const Orders = ({ token }) => {
               </div>
 
               <p>{order.address.phone}</p>
+              <p>Email: {order.address.email}</p>
             </div>
 
             <div>
-              <p className="text-sm sm:text-[15px]">
-                Items : {order.items.length}
-              </p>
-              <p className="mt-3">Method : {order.paymentMethod}</p>
-              <p>Payment : {order.payment ? "Done" : "Pending"}</p>
-              <p>Date : {new Date(order.date).toLocaleString()}</p>
+              <p className="text-sm sm:text-[15px]">Items: 1</p>
+              <p className="mt-3">Method: {order.paymentMethod}</p>
+              <p>Payment: {order.payment ? "Done" : "Pending"}</p>
+              <p>Date: {new Date(order.date).toLocaleString()}</p>
             </div>
 
             <p className="text-sm sm:text-[15px]">

@@ -51,8 +51,8 @@ const Login = ({ setToken }) => {
     try {
       const url =
         mode === 'signup'
-          ? backandUrl + '/api/user/register'
-          : backandUrl + '/api/user/admin/login';
+          ? backandUrl + '/api/seller/register'
+          : backandUrl + '/api/seller/login';
 
       const payload =
         mode === 'signup'

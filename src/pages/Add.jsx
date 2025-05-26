@@ -9,7 +9,7 @@ const Add = ({ token }) => {
   const [image2, setImage2] = useState(false);
   const [image3, setImage3] = useState(false);
   const [image4, setImage4] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -26,7 +26,8 @@ const Add = ({ token }) => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(backandUrl + "/api/category/fetch/all");
+      const response = await axios.get(backandUrl + "/api/category/fetch/all", {
+      });
       if (response.data.success) {
         setCategories(response.data.category);
       }
@@ -37,8 +38,8 @@ const Add = ({ token }) => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-
     try {
+      setLoading(true);
       const formData = new FormData();
       let cat1 = JSON.parse(category);
       let cat2 = JSON.parse(subCategory);
@@ -57,7 +58,7 @@ const Add = ({ token }) => {
       image4 && formData.append("image4", image4);
 
       const response = await axios.post(
-        backandUrl + "/api/product/add",
+        backandUrl + "/api/seller/product/add",
         formData,
         { headers: { token } }
       );
@@ -72,12 +73,12 @@ const Add = ({ token }) => {
         setImage4(false);
         setPrice("");
         setUnit("piece"); // Reset unit
-      } else {
-        toast.error(response.data.message);
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
       toast.error(error.message);
+      setLoading(false);
     }
   };
 
