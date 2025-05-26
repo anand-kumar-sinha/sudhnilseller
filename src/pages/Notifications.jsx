@@ -28,12 +28,41 @@ export default function SellerNotificationPage() {
     }
   };
 
-  const deleteNotification = (id) => {
-    setNotifications((prev) => prev.filter((notif) => notif.id !== id));
+  const deleteNotification = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        backandUrl + "/api/seller/notifications/delete",
+        { notificationId: id },
+        {
+          headers: { token },
+        }
+      );
+
+      if (response.data.success) {
+        fetchNotification();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const deleteAllNotifications = () => {
-    setNotifications([]);
+  const deleteAllNotifications = async () => {
+    try {
+      let token = localStorage.getItem("token");
+      const response = await axios.post(
+        backandUrl + "/api/seller/notifications/delete/all",
+        {},
+        {
+          headers: { token },
+        }
+      );
+      if (response.data.success) {
+        setNotifications([]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
