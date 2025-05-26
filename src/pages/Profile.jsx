@@ -1,28 +1,55 @@
-import React, { useState } from "react";
-import { UserCircle, Edit, Save } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { backandUrl } from "../App";
+import axios from "axios";
+import { Edit, Save, UserCircle } from "lucide-react";
 
-const initialSellerData = {
-  name: "Seller One",
-  email: "seller1@example.com",
-  phone: "(555) 987-6543",
-  storeName: "Gadget Store",
-  storeAddress: "456 Market Street, Springfield, IL, 62704",
-  description: "Specializing in electronics and gadgets."
-};
-
-export default function SellerProfilePage() {
-  const [seller, setSeller] = useState(initialSellerData);
+const Profile = () => {
+  const [seller, setSeller] = useState();
   const [isEditing, setIsEditing] = useState(false);
-  const [editedSeller, setEditedSeller] = useState(initialSellerData);
+  const [editedSeller, setEditedSeller] = useState();
+
+  useEffect(() => {
+    fetchSeller();
+  }, []);
+
+  const fetchSeller = async () => {
+    let token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(backandUrl + "/api/seller/me", {
+        headers: { token },
+      });
+      if (response.data.success) {
+        setSeller(response.data.seller);
+        localStorage.setItem("seller", JSON.stringify(response.data.seller));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
     setEditedSeller(seller);
   };
 
-  const handleSave = () => {
-    setSeller(editedSeller);
-    setIsEditing(false);
+  const handleSave = async () => {
+    let token = localStorage.getItem("token");
+    try {
+      const response = await axios.post(
+        backandUrl + "/api/seller/me/update",
+        editedSeller,
+        {
+          headers: { token },
+        }
+      );
+      if (response.data.success) {
+        localStorage.setItem("seller", JSON.stringify(response.data.seller));
+        setSeller(response.data.seller);
+      }
+      setIsEditing(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleChange = (e) => {
@@ -40,15 +67,39 @@ export default function SellerProfilePage() {
         <div className="mt-4 space-y-2">
           {isEditing ? (
             <>
-              <input name="storeName" value={editedSeller.storeName} onChange={handleChange} className="border rounded p-1 w-full" />
-              <input name="storeAddress" value={editedSeller.storeAddress} onChange={handleChange} className="border rounded p-1 w-full" />
-              <textarea name="description" value={editedSeller.description} onChange={handleChange} className="border rounded p-1 w-full"></textarea>
+              <input
+                name="storeName"
+                value={editedSeller?.storeName}
+                onChange={handleChange}
+                className="border rounded p-1 w-full"
+                placeholder="Enter store name"
+              />
+              <input
+                name="storeAddress"
+                value={editedSeller?.storeAddress}
+                onChange={handleChange}
+                className="border rounded p-1 w-full"
+                placeholder="Enter store address"
+              />
+              <textarea
+                name="description"
+                value={editedSeller?.description}
+                onChange={handleChange}
+                className="border rounded p-1 w-full"
+                placeholder="Enter store description"
+              ></textarea>
             </>
           ) : (
             <>
-              <p><strong>Store Name:</strong> {seller.storeName}</p>
-              <p><strong>Store Address:</strong> {seller.storeAddress}</p>
-              <p><strong>Description:</strong> {seller.description}</p>
+              <p>
+                <strong>Store Name:</strong> {seller?.storeName}
+              </p>
+              <p>
+                <strong>Store Address:</strong> {seller?.storeAddress}
+              </p>
+              <p>
+                <strong>Description:</strong> {seller?.description}
+              </p>
             </>
           )}
         </div>
@@ -56,28 +107,60 @@ export default function SellerProfilePage() {
         <div className="mt-4 space-y-2">
           {isEditing ? (
             <>
-              <input name="name" value={editedSeller.name} onChange={handleChange} className="border rounded p-1 w-full" />
-              <input name="email" value={editedSeller.email} onChange={handleChange} className="border rounded p-1 w-full" />
-              <input name="phone" value={editedSeller.phone} onChange={handleChange} className="border rounded p-1 w-full" />
+              <input
+                name="name"
+                value={editedSeller?.name}
+                onChange={handleChange}
+                className="border rounded p-1 w-full"
+                placeholder="Enter your name"
+              />
+              <input
+                name="email"
+                value={editedSeller?.email}
+                onChange={handleChange}
+                className="border rounded p-1 w-full"
+                placeholder="Enter your email"
+              />
+              <input
+                name="phone"
+                value={editedSeller?.phone}
+                onChange={handleChange}
+                className="border rounded p-1 w-full"
+                placeholder="Enter your phone number"
+              />
             </>
           ) : (
             <>
-              <p><strong>Name:</strong> {seller.name}</p>
-              <p><strong>Email:</strong> {seller.email}</p>
-              <p><strong>Phone:</strong> {seller.phone}</p>
+              <p>
+                <strong>Name:</strong> {seller?.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {seller?.email}
+              </p>
+              <p>
+                <strong>Phone:</strong> {seller?.phone}
+              </p>
             </>
           )}
         </div>
         {isEditing ? (
-          <button onClick={handleSave} className="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2">
+          <button
+            onClick={handleSave}
+            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center gap-2"
+          >
             <Save size={16} /> Save Profile
           </button>
         ) : (
-          <button onClick={handleEditToggle} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2">
+          <button
+            onClick={handleEditToggle}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2"
+          >
             <Edit size={16} /> Edit Profile
           </button>
         )}
       </div>
     </div>
   );
-}
+};
+
+export default Profile;
